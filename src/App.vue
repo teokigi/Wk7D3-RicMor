@@ -1,15 +1,27 @@
 <template>
   <body id="app">
   <div id="divPage">
+
     <noscript>
       <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
+
     <div id="divHeader">
       <h1>Rick and Morty</h1>
     </div>
+
     <div id="divBody">
-      <character-list></character-list>
+      <div> Character List </div>
+        <label for="charcter_select">Select a character:</label>
+        <select id="character_select" v-model="selectedCharacter">
+          <option disabled value="">Select a country</option>
+           <character-list v-for="character in rmShow" :character="character">
+           </character-list>
+         </option>
+     </select>
+      <character-detail v-if="selectedCharacter" :character="selectedCharacter"></character-detail>
     </div>
+
   </div>
 </body>
 </template>
@@ -17,22 +29,28 @@
 <script>
 
 import CharacterList from './components/CharacterList.vue'
-
+import {eventBus} from './main.js'
+import CharacterDetail from './components/CharacterDetail.vue'
 
 export default {
   name: 'App',
   data(){
     return {
-      rmShow: null
+      rmShow: null,
+      selectedCharacter: null,
     }
   },
   components:{
-    'character-list': CharacterList
+    'character-list':   CharacterList,
+    'character-detail': CharacterDetail,
+
   },
   mounted(){
     fetch('https://rickandmortyapi.com/api/character/')
     .then(res => res.json())
-    .then(data => this.rmShow = data)
+    .then(data => this.rmShow = data.results)
+
+    eventBus.$on('character-info',character => this.selectedCharacter = character)
   },
 }
 </script>
@@ -67,11 +85,11 @@ div{
 }
 </style>
 <!-- MVP
-TODO - Display a list of character names.
-TODO - Add a click event to the list item which should then render more detail about that character (name, species, status).
-TODO - Use reusable components.
+DONE - Display a list of character names.
+DONE - Add a click event to the list item which should then render more detail about that character (name, species, status).
+WUT? - Use reusable components.
      Extensions
-TODO - Instead of rendering a list, populate a dropdown with all of the characters names.
+DONE - Instead of rendering a list, populate a dropdown with all of the characters names.
 TODO - Add a change event to the select that renders information about the selected character.
      Advanced Extensions
 TODO - Add the characters image and origin name to the character detail component.
