@@ -11,15 +11,21 @@
     </div>
 
     <div id="divBody">
-      <div> Character List </div>
-        <label for="charcter_select">Select a character:</label>
+
+      <label for="character_search">search for a character:</label>
+      <input type="text" v-model="selectedCharacter2" placeholder="Enter character Name"><br>
+
+
+        <label for="character_select">Select a character:</label>
         <select id="character_select" v-model="selectedCharacter">
-          <option disabled value="">Select a country</option>
+          <option disabled value="">Select a character</option>
            <character-list v-for="character in rmShow" :character="character">
            </character-list>
          </option>
      </select>
+
       <character-detail v-if="selectedCharacter" :character="selectedCharacter"></character-detail>
+      <!-- <character-detail v-if="selectedCharacter2" :character="filteredCharacter"></character-detail> -->
     </div>
 
   </div>
@@ -38,12 +44,20 @@ export default {
     return {
       rmShow: null,
       selectedCharacter: null,
+      selectedCharacter2: null,
     }
   },
   components:{
     'character-list':   CharacterList,
     'character-detail': CharacterDetail,
 
+  },
+  computed:{
+    filteredCharacters(){
+      this.rmShow.filter(character => {
+        character.name.include(selectedCharacter2)
+      })
+    }
   },
   mounted(){
     fetch('https://rickandmortyapi.com/api/character/')
@@ -90,9 +104,9 @@ DONE - Add a click event to the list item which should then render more detail a
 WUT? - Use reusable components.
      Extensions
 DONE - Instead of rendering a list, populate a dropdown with all of the characters names.
-TODO - Add a change event to the select that renders information about the selected character.
+DONE - Add a change event to the select that renders information about the selected character.
      Advanced Extensions
-TODO - Add the characters image and origin name to the character detail component.
+DONE - Add the characters image and origin name to the character detail component.
 TODO - Add a search bar to the page so that when a user enters the characters name the character detail component renders. Try to achieve this without the
      Planning
      Draw a diagram of your files, detailing:
