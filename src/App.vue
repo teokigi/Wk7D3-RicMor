@@ -13,7 +13,7 @@
     <div id="divBody">
 
       <label for="character_search">search for a character:</label>
-      <input type="text" v-model="selectedCharacter2" placeholder="Enter character Name"><br>
+      <input type="text" v-on:input="filterCharacter" v-model="secondSC" placeholder="Enter character Name"><br>
 
 
         <label for="character_select">Select a character:</label>
@@ -25,7 +25,7 @@
      </select>
 
       <character-detail v-if="selectedCharacter" :character="selectedCharacter"></character-detail>
-      <!-- <character-detail v-if="selectedCharacter2" :character="filteredCharacter"></character-detail> -->
+      <character-detail v-if="secondSC" :character="filteredCharacter"></character-detail>
     </div>
 
   </div>
@@ -44,7 +44,8 @@ export default {
     return {
       rmShow: null,
       selectedCharacter: null,
-      selectedCharacter2: null,
+      secondSC: null,
+      filteredCharacter: null,
     }
   },
   components:{
@@ -52,12 +53,11 @@ export default {
     'character-detail': CharacterDetail,
 
   },
-  computed:{
-    filteredCharacters(){
-      this.rmShow.filter(character => {
-        character.name.include(selectedCharacter2)
-      })
-    }
+  methods:{
+    filterCharacter(){
+      this.filteredCharacter = this.rmShow.find(character => character.name.toLowerCase().includes(this.secondSC.toLowerCase()))
+
+      }
   },
   mounted(){
     fetch('https://rickandmortyapi.com/api/character/')
@@ -107,7 +107,7 @@ DONE - Instead of rendering a list, populate a dropdown with all of the characte
 DONE - Add a change event to the select that renders information about the selected character.
      Advanced Extensions
 DONE - Add the characters image and origin name to the character detail component.
-TODO - Add a search bar to the page so that when a user enters the characters name the character detail component renders. Try to achieve this without the
+done - Add a search bar to the page so that when a user enters the characters name the character detail component renders. Try to achieve this without the
      Planning
      Draw a diagram of your files, detailing:
 TODO - the data, props, components and methods for each component.
